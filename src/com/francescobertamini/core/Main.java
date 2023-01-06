@@ -18,7 +18,11 @@ public class Main {
         int userIDs[] = new int[UMDimension];
         String queries[] = new String[UMDimension];
         String utilityMatrix[] = new String[UMDimension + 1];
-
+        
+        //Generates the IDList and writes it to a file
+        IdListGenerator IDList = new IdListGenerator(UMDimension);
+        
+        
         ///////////////////////////////////////////////////////////////////////////////////
 
         //Get the attributes and their values from the tuples file.
