@@ -6,8 +6,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+    	
         //The dimension of the square utility matrix.
         final int UMDimension = 500;
+        
+        //Generates the IDList and writes it to a file
+        IdListGenerator IDList = new IdListGenerator(UMDimension);
+        
         //Array of HashSet of strings containing the attributes' unique values.
         HashSet<String> attributesValues[] = new HashSet[0];
         //Array of strings containing the names of the attributes contained in the tuples CSV source file.
@@ -19,8 +24,7 @@ public class Main {
         String queries[] = new String[UMDimension];
         String utilityMatrix[] = new String[UMDimension + 1];
         
-        //Generates the IDList and writes it to a file
-        IdListGenerator IDList = new IdListGenerator(UMDimension);
+
         
         
         ///////////////////////////////////////////////////////////////////////////////////
