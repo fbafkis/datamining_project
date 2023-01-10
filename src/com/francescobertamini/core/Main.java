@@ -23,10 +23,7 @@ public class Main {
         int userIDs[] = new int[UMDimension];
         String queries[] = new String[UMDimension];
         String utilityMatrix[] = new String[UMDimension + 1];
-        
 
-        
-        
         ///////////////////////////////////////////////////////////////////////////////////
 
         //Get the attributes and their values from the tuples file.
@@ -145,14 +142,13 @@ public class Main {
                 String umLine = "U" + Integer.toString(userIDs[u]);
 
                 ArrayList<Integer> orderedChoosenQueriesIDs = getRandomIndexes(queryIDs.length, queryIDs);
-                for (int q = 0; q < queryIDs.length; q++) {
+                for (int q = 0; q < (queryIDs.length); q++) {
                     if (orderedChoosenQueriesIDs.contains(queryIDs[q])) {
                         Random random = new Random();
                         int randomScore = ThreadLocalRandom.current().nextInt(1, 100 + 1);
                         umLine += "," + Integer.toString(randomScore);
-
                     } else {
-                        umLine += ",,";
+                        umLine += ",";
                     }
                 }
                 utilityMatrix[u + 1] = umLine;
