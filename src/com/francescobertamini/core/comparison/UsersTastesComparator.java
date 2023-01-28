@@ -28,7 +28,7 @@ public class UsersTastesComparator {
                     int matchingQueries = 0;
 
                     for (int i = 1; i < matrixLine.length; i++) {
-                        if (currentUserScores[i] != 0f && matrixLine[i] != 0f) {
+                        if (currentUserScores[i] != -101f && matrixLine[i] != -101f) {
                             userScore += Math.abs(currentUserScores[i] - matrixLine[i]);
                             matchingQueries++;
                         }

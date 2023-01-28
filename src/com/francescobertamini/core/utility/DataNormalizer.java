@@ -49,6 +49,8 @@ public class DataNormalizer {
                 for (int i = 0; i < values.length; i++) {
                     if (values[i] != 0) {
                         normalizedArray[i] = (float) values[i] - average;
+                    } else {
+                        normalizedArray[i] = -101f;
                     }
                 }
 

@@ -12,6 +12,7 @@ import static com.francescobertamini.core.data_generation.QueryGenerator.generat
 import static com.francescobertamini.core.data_generation.TuplesReader.readTuples;
 import static com.francescobertamini.core.data_generation.UMGenerator.generateUM;
 import static com.francescobertamini.core.data_generation.UsersIDGenerator.generateUserIDs;
+import static com.francescobertamini.core.um_filling.CollaborativeFilter.evaluate;
 import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
 import static com.francescobertamini.core.utility.FileWriter.writeFile;
 import static com.francescobertamini.core.utility.QueryResolution.getQueryResult;
@@ -82,6 +83,7 @@ public class Main {
             ///////////////////////////////////////////////////////////////////////////////////
 
 
+            evaluate(3,135, 271, userIDs,normalizedUM);
 
             //Closing the tuples file reading try-catch block.
         } catch (IOException e) {
