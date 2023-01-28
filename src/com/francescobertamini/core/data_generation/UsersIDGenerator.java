@@ -6,7 +6,8 @@ import static com.francescobertamini.core.utility.FileWriter.writeFile;
 
 public class UsersIDGenerator {
 
-    public static void generateUserIDs(int UMRowsDimension, int userIDs[]) {
+    public static int[] generateUserIDs(int UMRowsDimension) {
+        int userIDs[] = new int[UMRowsDimension];
 
         //Create the user IDs.
         for (int i = 0; i < UMRowsDimension; i++) {
@@ -30,6 +31,7 @@ public class UsersIDGenerator {
             System.err.println("Error in writing the users IDs CSV file.");
         }
 
+        return userIDs;
 
     }
 

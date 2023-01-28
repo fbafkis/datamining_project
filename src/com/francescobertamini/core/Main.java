@@ -1,12 +1,17 @@
 package com.francescobertamini.core;
 
+import com.francescobertamini.core.data_generation.UsersIDGenerator;
 import com.francescobertamini.core.utility.QueryResolution;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.francescobertamini.core.data_generation.QueryGenerator.generateQueries;
 import static com.francescobertamini.core.data_generation.TuplesReader.readTuples;
+import static com.francescobertamini.core.data_generation.UMGenerator.generateUM;
+import static com.francescobertamini.core.data_generation.UsersIDGenerator.generateUserIDs;
+import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
 import static com.francescobertamini.core.utility.FileWriter.writeFile;
 import static com.francescobertamini.core.utility.QueryResolution.getQueryResult;
 import static com.francescobertamini.core.utility.RandomIndexGenerator.getRandomIndexes;
@@ -23,13 +28,17 @@ public class Main {
         String attributesNames[];
         //The number of the different attributes inside the
         int attributesNumber;
-        int queryIDs[] = new int[UMColumnsDimension];
-        int userIDs[] = new int[UMRowsDimension];
+        int queryIDs[];
+        int userIDs[];
 
         ArrayList<String[]> splittedTuplesLines;
 
         String queries[] = new String[UMColumnsDimension];
         String utilityMatrix[] = new String[UMColumnsDimension + 1];
+
+        ArrayList<int[]> splittedUM = new ArrayList<>();
+        ArrayList<float[]> normalizedUM = new ArrayList<>();
+
 
         ///////////////////////////////////////////////////////////////////////////////////
 
@@ -37,63 +46,39 @@ public class Main {
         try {
 
             //Call the method that read the tuples from CSV file.
-            Object[] TRintialitedVariables = readTuples();
+            Object[] TRintializedVariables = readTuples();
 
-            splittedTuplesLines = (ArrayList<String[]>) TRintialitedVariables[1];
-            attributesNumber = (int) TRintialitedVariables[2];
-            attributesValues = (HashSet<String>[]) TRintialitedVariables[3];
-            attributesNames = (String[]) TRintialitedVariables[4];
+            splittedTuplesLines = (ArrayList<String[]>) TRintializedVariables[1];
+            attributesNumber = (int) TRintializedVariables[2];
+            attributesValues = (HashSet<String>[]) TRintializedVariables[3];
+            attributesNames = (String[]) TRintializedVariables[4];
 
 
             //Prova con il metodo che da i risultati
             getQueryResult("Q25,name=Mary,lastname=Brown,city=Trento,height=164", attributesNames, splittedTuplesLines);
             getQueryResult("Q30,sex=female", attributesNames, splittedTuplesLines);
 
+            ///////////////////////////////////////////////////////////////////////////////////
+
+            Object [] QGinitializedVariables = generateQueries(UMColumnsDimension, attributesNumber, attributesNames, attributesValues);
+
+            queries = (String[]) QGinitializedVariables[0];
+            queryIDs = (int[]) QGinitializedVariables[1];
 
             ///////////////////////////////////////////////////////////////////////////////////
 
-
-
-            ///////////////////////////////////////////////////////////////////////////////////
-
+            userIDs = generateUserIDs(UMRowsDimension);
 
             ///////////////////////////////////////////////////////////////////////////////////
 
-            //Compose the utility matrix
-            //Prepare the first row containing all the query IDs.
-            String umFirstLine = "USER_IDs, Q" + Integer.toString(queryIDs[0]);
-            for (int t = 1; t < queryIDs.length; t++) {
-                umFirstLine += ",Q" + Integer.toString(queryIDs[t]);
-            }
-            utilityMatrix[0] = umFirstLine;
-            //Prepare all the lines containing the scores referred to the queries for each user.
-            for (int u = 0; u < userIDs.length; u++) {
-                String umLine = "U" + Integer.toString(userIDs[u]);
+            Object [] GUMinitializedVariables = generateUM(queryIDs, UMColumnsDimension, userIDs);
+            utilityMatrix = (String[]) GUMinitializedVariables[0];
+            splittedUM = (ArrayList<int[]>) GUMinitializedVariables[1];
 
-                ArrayList<Integer> orderedChoosenQueriesIDs = getRandomIndexes(queryIDs.length, queryIDs);
-                for (int q = 0; q < queryIDs.length; q++) {
-                    if (orderedChoosenQueriesIDs.contains(queryIDs[q])) {
-                        Random random = new Random();
-                        int randomScore = ThreadLocalRandom.current().nextInt(1, 100 + 1);
-                        umLine += "," + Integer.toString(randomScore);
+            ///////////////////////////////////////////////////////////////////////////////////
 
-                    } else {
-                        umLine += ",,";
-                    }
-                }
-                utilityMatrix[u + 1] = umLine;
-            }
-            //Print the utility matrix.
-            for (String s : utilityMatrix) {
-                //System.out.println(s);
-            }
-            //Print the utility matrix file
-            try {
-                writeFile("utility_matrix", utilityMatrix);
-                System.out.println("Utility matrix CSV file created.");
-            } catch (IOException e) {
-                System.err.println("Error in writing the utility matrix CSV file.");
-            }
+            normalizedUM = normalizeUM(splittedUM);
+
             //Closing the tuples file reading try-catch block.
         } catch (IOException e) {
             System.err.println("It was not possible to open the tuples CSV file.");
