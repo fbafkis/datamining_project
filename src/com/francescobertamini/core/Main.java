@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.francescobertamini.core.comparison.UsersTastesComparator.findMostSimilarUsers;
 import static com.francescobertamini.core.data_generation.QueryGenerator.generateQueries;
 import static com.francescobertamini.core.data_generation.TuplesReader.readTuples;
 import static com.francescobertamini.core.data_generation.UMGenerator.generateUM;
@@ -39,7 +40,6 @@ public class Main {
         ArrayList<int[]> splittedUM = new ArrayList<>();
         ArrayList<float[]> normalizedUM = new ArrayList<>();
 
-
         ///////////////////////////////////////////////////////////////////////////////////
 
         //Get the attributes and their values from the tuples file.
@@ -60,7 +60,7 @@ public class Main {
 
             ///////////////////////////////////////////////////////////////////////////////////
 
-            Object [] QGinitializedVariables = generateQueries(UMColumnsDimension, attributesNumber, attributesNames, attributesValues);
+            Object[] QGinitializedVariables = generateQueries(UMColumnsDimension, attributesNumber, attributesNames, attributesValues);
 
             queries = (String[]) QGinitializedVariables[0];
             queryIDs = (int[]) QGinitializedVariables[1];
@@ -71,13 +71,17 @@ public class Main {
 
             ///////////////////////////////////////////////////////////////////////////////////
 
-            Object [] GUMinitializedVariables = generateUM(queryIDs, UMColumnsDimension, userIDs);
+            Object[] GUMinitializedVariables = generateUM(queryIDs, UMColumnsDimension, userIDs);
             utilityMatrix = (String[]) GUMinitializedVariables[0];
             splittedUM = (ArrayList<int[]>) GUMinitializedVariables[1];
 
             ///////////////////////////////////////////////////////////////////////////////////
 
             normalizedUM = normalizeUM(splittedUM);
+
+            ///////////////////////////////////////////////////////////////////////////////////
+
+
 
             //Closing the tuples file reading try-catch block.
         } catch (IOException e) {
