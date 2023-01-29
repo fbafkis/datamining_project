@@ -1,25 +1,21 @@
 package com.francescobertamini.core;
 
-import com.francescobertamini.core.data_generation.UsersIDGenerator;
-import com.francescobertamini.core.utility.QueryResolution;
-
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
-import static com.francescobertamini.core.comparison.UsersTastesComparator.findMostSimilarUsers;
 import static com.francescobertamini.core.data_generation.QueryGenerator.generateQueries;
 import static com.francescobertamini.core.data_generation.TuplesReader.readTuples;
 import static com.francescobertamini.core.data_generation.UMGenerator.generateUM;
 import static com.francescobertamini.core.data_generation.UsersIDGenerator.generateUserIDs;
-import static com.francescobertamini.core.um_filling.CollaborativeFilter.evaluate;
+import static com.francescobertamini.core.um_filling.UMFiller.fillUtilityMatrix;
 import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
-import static com.francescobertamini.core.utility.FileWriter.writeFile;
 import static com.francescobertamini.core.utility.QueryResolution.getQueryResult;
-import static com.francescobertamini.core.utility.RandomIndexGenerator.getRandomIndexes;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        int k1 = 4;
+        int k2 = 5;
+
         //The dimension of the square utility matrix.
         final int UMRowsDimension = 500;
         final int UMColumnsDimension = 500;
@@ -36,9 +32,10 @@ public class Main {
         ArrayList<String[]> splittedTuplesLines;
 
         String queries[] = new String[UMColumnsDimension];
+        ArrayList<String[]> splittedQueries = new ArrayList<>();
         String utilityMatrix[] = new String[UMColumnsDimension + 1];
 
-        ArrayList<int[]> splittedUM = new ArrayList<>();
+        ArrayList<int[]> splittedUM;
         ArrayList<float[]> normalizedUM = new ArrayList<>();
 
         ///////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +80,8 @@ public class Main {
             ///////////////////////////////////////////////////////////////////////////////////
 
 
-            evaluate(3,135, 271, userIDs,normalizedUM);
+            fillUtilityMatrix(k1, k2, userIDs, normalizedUM, queries, attributesNames,
+                    splittedTuplesLines, UMColumnsDimension, UMRowsDimension);
 
             //Closing the tuples file reading try-catch block.
         } catch (IOException e) {

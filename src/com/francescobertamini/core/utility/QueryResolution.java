@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 public class QueryResolution {
 
-    public static HashSet<String[]> getQueryResult(String query, String[] attributesNames, ArrayList<String[]> splittedTuplesLines) {
+    public static HashSet<String> getQueryResult(String query, String[] attributesNames, ArrayList<String[]> splittedTuplesLines) {
 
-        HashSet<String[]> result = new HashSet<>();
+        HashSet<String> result = new HashSet<>();
         String[] queryComponents = query.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
 
         for (int q = 1; q < queryComponents.length; q++) {
@@ -26,7 +26,12 @@ public class QueryResolution {
             if (attributeIndex != -1) {
                 for (String[] s : splittedTuplesLines) {
                     if (s[attributeIndex].equals(queryTerms[1])) {
-                        result.add(s);
+                        String stringedTupled = new String();
+                        stringedTupled = s[0];
+                        for (int i = 1; i < s.length; i++) {
+                            stringedTupled += "," + s[i];
+                        }
+                        result.add(stringedTupled);
                     }
                 }
             } else {
@@ -34,17 +39,28 @@ public class QueryResolution {
             }
         }
 
-        System.out.println("Result:" + result.size());
-       for (String[] r : result) {
-           System.out.println();
-            for (String t : r) {
-                System.out.print(t + " ");
-            }
+        System.out.println("Result of size "+ result.size() +":");
+        for (String r : result) {
+            System.out.println(r);
         }
-       System.out.println();
+        System.out.println();
 
         return result;
 
     }
+
+    public static int findQueryColumnIndex(int queryId, float[] firstUMLine) {
+        int index = -1;
+        for (int i = 1; i < firstUMLine.length; i++) {
+            if ((int) firstUMLine[i] == queryId) {
+                index = i;
+            }
+        }
+        if (index == -1) {
+            System.err.println("Error in finding query column index.");
+        }
+        return index;
+    }
+
 
 }

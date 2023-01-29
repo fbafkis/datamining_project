@@ -1,4 +1,4 @@
-package com.francescobertamini.core.comparison;
+package com.francescobertamini.core.utility;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,7 +35,6 @@ public class UsersTastesComparator {
                     }
 
                     userScore = userScore / (float) matchingQueries;
-
 
                     float[] rankingMatrixLine = new float[2];
 

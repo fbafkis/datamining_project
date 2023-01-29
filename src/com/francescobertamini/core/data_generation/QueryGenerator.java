@@ -11,11 +11,10 @@ import static com.francescobertamini.core.utility.RandomIndexGenerator.getRandom
 
 public class QueryGenerator {
 
-    public static Object[] generateQueries (int UMColumnsDimension, int attributesNumber, String attributesNames[], HashSet<String> attributesValues[]){
+    public static Object[] generateQueries(int UMColumnsDimension, int attributesNumber, String attributesNames[], HashSet<String> attributesValues[]) {
 
         int queryIDs[] = new int[UMColumnsDimension];
         String queries[] = new String[UMColumnsDimension];
-        String utilityMatrix[] = new String[UMColumnsDimension + 1];
 
         //Compose the queries.
         for (int i = 0; i < UMColumnsDimension; i++) {
@@ -59,7 +58,7 @@ public class QueryGenerator {
             System.err.println("Error in writing the queries CSV file.");
         }
 
-        Object [] result = new Object[2];
+        Object[] result = new Object[2];
 
         result[0] = queries;
         result[1] = queryIDs;
