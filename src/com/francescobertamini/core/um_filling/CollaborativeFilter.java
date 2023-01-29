@@ -13,7 +13,6 @@ public class CollaborativeFilter {
         ArrayList<float[]> usersRankingScores = new ArrayList<>();
         int queryColumnIndex = findQueryColumnIndex(queryID, normalizedUM.get(0));
         float score = -101f;
-
         int usefulUsersCounter = 0;
 
         for (float[] user : usersRankingMatrix) {
