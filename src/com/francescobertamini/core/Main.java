@@ -3,6 +3,10 @@ package com.francescobertamini.core;
 import java.io.*;
 import java.util.*;
 
+import projPack.MatrixReader;
+import projPack.SVDAlgorithm;
+import projPack.UMUtil;
+
 import static com.francescobertamini.core.data_generation.QueryGenerator.generateQueries;
 import static com.francescobertamini.core.data_generation.TuplesReader.readTuples;
 import static com.francescobertamini.core.data_generation.UMGenerator.generateUM;
@@ -12,6 +16,22 @@ import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+    	
+		long timeBefore, timeAfter;
+		
+		timeBefore = System.nanoTime();
+		//Reads the utility matrix
+		MatrixReader reader = new MatrixReader("utility_matrix.csv");	
+	
+		//Normalizes the data for the utility matrix
+		UMUtil UMUtil = new UMUtil(reader.getUMAsDouble(), reader.getSize());		
+		UMUtil.normalizeData();
+
+		SVDAlgorithm svd = new SVDAlgorithm(UMUtil.getUM(), reader.getSize());
+		svd.sparseSVD();
+		timeAfter = System.nanoTime();
+		System.out.println("SVD took: " + (timeAfter-timeBefore) + " ns");
+    	
         //The k parameter for the collaborative filter.
         int k1 = 4;
         //The k parameter for the content based filter.
