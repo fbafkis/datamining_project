@@ -2,7 +2,6 @@ package com.francescobertamini.core;
 
 import java.io.*;
 import java.util.*;
-
 import static com.francescobertamini.core.data_generation.QueryGenerator.generateQueries;
 import static com.francescobertamini.core.data_generation.TuplesReader.readTuples;
 import static com.francescobertamini.core.data_generation.UMGenerator.generateUM;
@@ -12,6 +11,7 @@ import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+    	
         //The k parameter for the collaborative filter.
         int k1 = 4;
         //The k parameter for the content based filter.
