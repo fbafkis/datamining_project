@@ -1,7 +1,6 @@
 package com.francescobertamini.core.data_generation;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,12 +8,14 @@ import java.util.HashSet;
 
 public class TuplesReader {
 
+    //TODO: modify it to keep the option to read an external tuples file? (Move the linked variables generation to the TuplesGenerator class.
+
     public static Object[] readTuples() throws IOException {
 
 
         HashSet<String> attributesValues[] = new HashSet[0];
         String attributesNames[] = new String[1];
-        int  attributesNumber = 0;
+        int attributesNumber = 0;
         ArrayList<String> tuplesLines = new ArrayList<>();
         ArrayList<String[]> splittedTuplesLines = new ArrayList<>();
 

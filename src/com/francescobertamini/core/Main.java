@@ -9,40 +9,41 @@ import static com.francescobertamini.core.data_generation.UMGenerator.generateUM
 import static com.francescobertamini.core.data_generation.UsersIDGenerator.generateUserIDs;
 import static com.francescobertamini.core.um_filling.UMFiller.fillUtilityMatrix;
 import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
-import static com.francescobertamini.core.utility.QueryResolution.getQueryResult;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        //The k parameter for the collaborative filter.
         int k1 = 4;
+        //The k parameter for the content based filter.
         int k2 = 5;
-
-        //The dimension of the square utility matrix.
+        //The dimensions of the square utility matrix.
         final int UMRowsDimension = 500;
         final int UMColumnsDimension = 500;
-
         //Array of HashSet of strings containing the attributes' unique values.
         HashSet<String> attributesValues[];
         //Array of strings containing the names of the attributes contained in the tuples CSV source file.
         String attributesNames[];
-        //The number of the different attributes inside the
+        //The number of the different attributes inside the tuples set.
         int attributesNumber;
+        //The array containing all the query IDs.
         int queryIDs[];
+        //The array containing all the user IDs.
         int userIDs[];
-
+        //The divided in string array version of the tuples set.
         ArrayList<String[]> splittedTuplesLines;
-
-        String queries[] = new String[UMColumnsDimension];
-        ArrayList<String[]> splittedQueries = new ArrayList<>();
-        String utilityMatrix[] = new String[UMColumnsDimension + 1];
-
+        //The set of all the queries already posted to the system.
+        String queries[];
+        //The numerical version of the original utility matrix.
         ArrayList<int[]> splittedUM;
-        ArrayList<float[]> normalizedUM = new ArrayList<>();
-
-        ///////////////////////////////////////////////////////////////////////////////////
+        //The numerical and normalized version of the original utility matrix.
+        ArrayList<float[]> normalizedUM;
+        //The dense version of the numerical and normalized utility matrix.
+        ArrayList<float[]> denseUM;
 
         //Get the attributes and their values from the tuples file.
+        //TODO: remove because of tuple reading from memory.
         try {
-
+            //TODO: change because of tuple reading from memory.
             //Call the method that read the tuples from CSV file.
             Object[] TRintializedVariables = readTuples();
 
@@ -51,45 +52,26 @@ public class Main {
             attributesValues = (HashSet<String>[]) TRintializedVariables[3];
             attributesNames = (String[]) TRintializedVariables[4];
 
-
-            //Prova con il metodo che da i risultati
-            getQueryResult("Q25,name=Mary,lastname=Brown,city=Trento,height=164", attributesNames, splittedTuplesLines);
-            getQueryResult("Q30,sex=female", attributesNames, splittedTuplesLines);
-
-            ///////////////////////////////////////////////////////////////////////////////////
-
+            //Generate the queries.
             Object[] QGinitializedVariables = generateQueries(UMColumnsDimension, attributesNumber, attributesNames, attributesValues);
-
             queries = (String[]) QGinitializedVariables[0];
             queryIDs = (int[]) QGinitializedVariables[1];
-
-            ///////////////////////////////////////////////////////////////////////////////////
-
+            //Generate the users IDs.
             userIDs = generateUserIDs(UMRowsDimension);
-
-            ///////////////////////////////////////////////////////////////////////////////////
-
-            Object[] GUMinitializedVariables = generateUM(queryIDs, UMColumnsDimension, userIDs);
-            utilityMatrix = (String[]) GUMinitializedVariables[0];
-            splittedUM = (ArrayList<int[]>) GUMinitializedVariables[1];
-
-            ///////////////////////////////////////////////////////////////////////////////////
-
+            //Generate the utility matrix.
+            splittedUM = generateUM(queryIDs, UMColumnsDimension, userIDs);
+            //Normalize the utility matrix.
             normalizedUM = normalizeUM(splittedUM);
-
-            ///////////////////////////////////////////////////////////////////////////////////
-
-
-            fillUtilityMatrix(k1, k2, userIDs, normalizedUM, queries, attributesNames,
+            //Fill the sparse utility matrix.
+            denseUM = fillUtilityMatrix(k1, k2, normalizedUM, queries, attributesNames,
                     splittedTuplesLines, UMColumnsDimension, UMRowsDimension);
-
             //Closing the tuples file reading try-catch block.
         } catch (IOException e) {
+            //TODO: remove because of tuple reading from memory.
+            System.err.println();
             System.err.println("It was not possible to open the tuples CSV file.");
         }
     }
-
-
 }
 
 

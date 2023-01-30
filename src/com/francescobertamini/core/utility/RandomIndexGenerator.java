@@ -8,9 +8,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomIndexGenerator {
 
     /**
-     * @param maxNum The maximum size of the input integer array.
-     * @param source The input array containing the indexes to work on.
-     * @return The integer ArrayList containing the randomly chosen indexes sorted in increasing order.
+     * Giving an array of IDs as source and a maximum number of IDs to choose, it returns a set with randomly picked IDs
+     * from the source, sorted in increasing order.
+     *
+     * @param maxNum the maximum size of the input integer array
+     * @param source the input array containing the indexes to work on
+     * @return the integer ArrayList containing the randomly chosen indexes sorted in increasing order
      */
     public static ArrayList<Integer> getRandomIndexes(int maxNum, int[] source) {
         //Generate random number of indexes to pick.
@@ -30,6 +33,15 @@ public class RandomIndexGenerator {
         }
         //Order the final list of attributes' indexes.
         Collections.sort(orderedIndexes);
+        //Log
+        System.out.println();
+        System.out.println("Random Indexes Picker - Indexes picked.");
+
+        //Prints the ordered ArrayList containing the indexes.
+        /*for(int index : orderedIndexes){
+            System.out.println(index);
+        } */
+
         //Return the final ordered ArrayList.
         return orderedIndexes;
     }

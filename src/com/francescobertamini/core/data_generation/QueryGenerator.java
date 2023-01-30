@@ -11,9 +11,21 @@ import static com.francescobertamini.core.utility.RandomIndexGenerator.getRandom
 
 public class QueryGenerator {
 
+    /**
+     * It generates the queries already posted to the system by the users, using only the possible values present into
+     * the tuples. The queries are also printed to a CSV file.
+     *
+     * @param UMColumnsDimension width dimension of the utility matrix
+     * @param attributesNumber   number of attributes that compose the tuples
+     * @param attributesNames    names of all the possible attributes
+     * @param attributesValues   array of HasSet containing all the (unique) possible values present in the tuples for each attribute
+     * @return an array of object, with the array of String containing the queries and the array of int containing the generated query IDs.
+     */
     public static Object[] generateQueries(int UMColumnsDimension, int attributesNumber, String attributesNames[], HashSet<String> attributesValues[]) {
 
+        //Array containing all the query IDs.
         int queryIDs[] = new int[UMColumnsDimension];
+        //Array of String containing the queries.
         String queries[] = new String[UMColumnsDimension];
 
         //Compose the queries.
@@ -45,25 +57,30 @@ public class QueryGenerator {
             //The query create just above is added to the query set.
             queries[i] = query;
         }
+
         //Print the query set
-        //for (int o = 0; o < UMColumnsDimension; o++) {
-        //System.out.println(queries[o]);
-        //}
-        System.out.println("Queries set created.");
+        /*  for (int o = 0; o < UMColumnsDimension; o++) {
+          System.out.println(queries[o]);
+        }*/
+
+        //Log
+        System.out.println();
+        System.out.println("Query Generator - Queries set created.");
         //Call the method to write out the CSV file.
         try {
             writeFile("queries", queries);
-            System.out.println("Queries CSV file created.");
+            //Log
+            System.out.println();
+            System.out.println("Query Generator - Queries CSV file created.");
         } catch (IOException e) {
-            System.err.println("Error in writing the queries CSV file.");
+            System.err.println();
+            System.err.println("Query Generator - Error in writing the queries CSV file.");
         }
-
+        //Array of objects containing the two variables created.
         Object[] result = new Object[2];
-
         result[0] = queries;
         result[1] = queryIDs;
-
+        //Returning the array of objects.
         return result;
     }
-
 }

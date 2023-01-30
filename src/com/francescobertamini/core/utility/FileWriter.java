@@ -5,8 +5,10 @@ import java.io.*;
 public class FileWriter {
 
     /**
-     * @param fileName The name of the file that is going to be created.
-     * @param source   The source string array that is going to be printed into the file.
+     * Given an array of strings representing the file's lines, it writes the csv file with the specified name.
+     *
+     * @param fileName the name of the file that is going to be created
+     * @param source   the source string array that is going to be printed into the file
      */
     public static void writeFile(String fileName, String[] source) throws IOException {
         //Create the file.
@@ -25,6 +27,4 @@ public class FileWriter {
             System.err.println(e);
         }
     }
-
-
 }
