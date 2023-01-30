@@ -80,8 +80,9 @@ public class CollaborativeFilter {
         } else {
             //If it is impossible to find k valid users.
             System.err.println();
-            System.err.println("Coll Filter - Not enough suitable users were found. Try with a lower k value.");
-            score = 0f;
+            System.err.println("Coll Filter - Not enough suitable users were found. Try with a lower k value. " +
+                    "The value from the collaborative filter will not be considered.");
+            score = -101f;
         }
         //Returning the collaborative filter final guess for the query's score.
         return score;

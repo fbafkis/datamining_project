@@ -148,8 +148,9 @@ public class ContentBasedFilter {
             } else {
                 //If it is impossible to find k valid queries.
                 System.err.println();
-                System.err.println("CB Filter - Not enough suitable queries were found. Try with a lower k value.");
-                score = 0f;
+                System.err.println("CB Filter - Not enough suitable queries were found. Try with a lower k value. " +
+                        "The value from the content based filter will not be considered.");
+                score = -101f;
             }
         } else {
             //If the reference query is not found.

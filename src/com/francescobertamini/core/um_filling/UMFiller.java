@@ -53,8 +53,26 @@ public class UMFiller {
                     float collFilterScore = collEvaluate(k1, userID, queryID, normalizedUM);
                     //Retrive the score guess from the content based filter.
                     float cBFilterScore = cBEvaluate(k2, userID, queries, queryID, normalizedUM, attributesNames, splittedTuplesLines);
-                    //Calculate the average of the two score guesses, that will be the final score.
-                    float finalScore = (collFilterScore + cBFilterScore) / 2;
+                    //The final score variable.
+                    float finalScore = -101f;
+                    //If both the filters fail.
+                    if (cBFilterScore == -101f && collFilterScore == -101f) {
+                        System.err.println();
+                        System.err.println("UM Filler - It was not possible to retrieve a valid guess for both the collaborative and content based filter. Try with lower k values.");
+                        //If the CB filter fails.
+                    } else if (cBFilterScore == -101f && collFilterScore != -101f) {
+                        System.err.println();
+                        System.err.println("UM Filler - It was not possible to retrieve a valid guess for the content based filter. The final score will be made by the collaborative filter only. Try with lower k2 values.");
+                        finalScore = collFilterScore;
+                        //If the collaborative filter fails.
+                    } else if (cBFilterScore != -101f && collFilterScore == -101f) {
+                        System.err.println();
+                        System.err.println("UM Filler - It was not possible to retrieve a valid guess for the collaborative filter. The final score will be made by the content based filter only. Try with lower k1 values.");
+                        finalScore = cBFilterScore;
+                    } else {
+                        //Normal case: calculate the average of the two score guesses, that will be the final score.
+                        finalScore = (collFilterScore + cBFilterScore) / 2;
+                    }
                     //Log
                     System.out.println();
                     System.out.println("UM Filler - The final score for the query Q" + queryID + " is: " + finalScore + ".");
