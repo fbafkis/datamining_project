@@ -11,7 +11,9 @@ import static com.francescobertamini.core.utility.DataNormalizer.normalizeUM;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-    	
+
+        //The tuple's CSV file name:
+        String tuplesFileName = "tuples.csv";
         //The k parameter for the collaborative filter.
         int k1 = 4;
         //The k parameter for the content based filter.
@@ -41,11 +43,9 @@ public class Main {
         ArrayList<float[]> denseUM;
 
         //Get the attributes and their values from the tuples file.
-        //TODO: remove because of tuple reading from memory.
         try {
-            //TODO: change because of tuple reading from memory.
             //Call the method that read the tuples from CSV file.
-            Object[] TRintializedVariables = readTuples();
+            Object[] TRintializedVariables = readTuples(tuplesFileName);
 
             splittedTuplesLines = (ArrayList<String[]>) TRintializedVariables[1];
             attributesNumber = (int) TRintializedVariables[2];
@@ -53,9 +53,9 @@ public class Main {
             attributesNames = (String[]) TRintializedVariables[4];
 
             //Generate the queries.
-            Object[] QGinitializedVariables = generateQueries(UMColumnsDimension, attributesNumber, attributesNames, attributesValues);
-            queries = (String[]) QGinitializedVariables[0];
-            queryIDs = (int[]) QGinitializedVariables[1];
+            Object[] qGinitializedVariables = generateQueries(UMColumnsDimension, attributesNumber, attributesNames, attributesValues);
+            queries = (String[]) qGinitializedVariables[0];
+            queryIDs = (int[]) qGinitializedVariables[1];
             //Generate the users IDs.
             userIDs = generateUserIDs(UMRowsDimension);
             //Generate the utility matrix.
@@ -67,7 +67,6 @@ public class Main {
                     splittedTuplesLines, UMColumnsDimension, UMRowsDimension);
             //Closing the tuples file reading try-catch block.
         } catch (IOException e) {
-            //TODO: remove because of tuple reading from memory.
             System.err.println();
             System.err.println("It was not possible to open the tuples CSV file.");
         }

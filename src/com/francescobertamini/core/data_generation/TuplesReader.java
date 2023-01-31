@@ -8,18 +8,26 @@ import java.util.HashSet;
 
 public class TuplesReader {
 
-    //TODO: modify it to keep the option to read an external tuples file? (Move the linked variables generation to the TuplesGenerator class.
+    /**
+     * It reads the CSV file containing the tuples and it creates the different variables neede by the program to run.
+     *
+     * @param fileName the name of the CSV file containing the tuples
+     * @return the object array containing the variables
+     * @throws IOException
+     */
 
-    public static Object[] readTuples() throws IOException {
-
-
+    public static Object[] readTuples(String fileName) throws IOException {
+        //The set of all the possible (unique) values for each attribute.
         HashSet<String> attributesValues[] = new HashSet[0];
+        //The set of all the attribute/s names.
         String attributesNames[] = new String[1];
         int attributesNumber = 0;
+        //The tuples saved as an array of strings.
         ArrayList<String> tuplesLines = new ArrayList<>();
+        //The splitted version of the tuples set.
         ArrayList<String[]> splittedTuplesLines = new ArrayList<>();
-
-        BufferedReader tuplesReader = new BufferedReader(new FileReader("tuples.csv"));
+        //Read the file.
+        BufferedReader tuplesReader = new BufferedReader(new FileReader(fileName));
         //All the lines of the tuples CSV file are placed into an ArrayList.
         String tuplesLine = null;
         while ((tuplesLine = tuplesReader.readLine()) != null) {
@@ -30,10 +38,8 @@ public class TuplesReader {
         for (int i = 0; i < tuplesLines.size(); i++) {
             //The CSV file line is splitted.
             String[] splitted = tuplesLines.get(i).split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
-
+            //Add the splitted line to the splitted version of the tuple.
             splittedTuplesLines.add(splitted);
-
-
             //On the first line are placed the names of the attributes.
             if (i == 0) {
                 attributesNumber = splitted.length;
@@ -43,7 +49,6 @@ public class TuplesReader {
                     attributesValues[w] = new HashSet<String>();
                 }
                 //The attributes names are placed in a dedicated string array.
-                attributesNames = new String[attributesNumber];
                 attributesNames = splitted;
                 //On the other lines
             } else {
@@ -51,12 +56,13 @@ public class TuplesReader {
                 for (int e = 0; e < splitted.length; e++) {
                     attributesValues[e].add(splitted[e]);
                 }
-
-
             }
         }
+        //Log
+        System.out.println();
         System.out.println("Tuples CSV file analyzed successful.");
 
+        //Return the object array containing the
         Object[] result = new Object[5];
         result[0] = tuplesLines;
         result[1] = splittedTuplesLines;

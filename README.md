@@ -1,3 +1,4 @@
-# dataset_generator_part2
+# data mining project 
 
-Part 2, by Francesco Bertamini, to create the users' list, the query set and the utility matrix. 
+First strategy: hybrid system, by Francesco Bertamini, to create the users' list, the query set and the utility matrix. 
+The Jaccard similarity has been developed by Kenan Henriksen.

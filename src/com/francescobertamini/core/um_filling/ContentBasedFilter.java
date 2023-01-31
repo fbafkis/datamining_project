@@ -46,6 +46,20 @@ public class ContentBasedFilter {
                 query = q;
             }
         }
+        //The UM's line of the reference user.
+        float[] userUMLine = null;
+        //Retrieving the UM's line containing the scores of the reference user.
+        for (int i = 1; i < normalizedUM.size(); i++) {
+            if (normalizedUM.get(i)[0] == currentUserId) {
+                userUMLine = normalizedUM.get(i);
+            }
+        }
+        //If the reference users' line is not found inside the UM.
+        if (userUMLine == null) {
+            System.err.println();
+            System.err.println("Error in finding the user line into utility matrix.");
+            System.exit(1);
+        }
         //If the reference query has been found.
         if (query != null) {
             //Retrieving the result of the reference query (the set of tuples).
@@ -54,20 +68,25 @@ public class ContentBasedFilter {
             ArrayList<float[]> querySimilarityRanking = new ArrayList<>();
             //Cycling over the queries.
             for (String q : queries) {
-                //Retrieving the result of the currently analyzed query (the set of tuples).
-                HashSet<String> currentQueryResult = getQueryResult(q, attributesNames, splittedTuplesLines);
-                //Calculating the Jaccard similarity between the rerference query and the currently analyzed.
-                float similarityScore = getJaccardScore(queryResult, currentQueryResult);
                 //Split the currently analyzed query to get its ID.
                 String splitted[] = q.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
                 splitted[0] = splitted[0].substring(1);
                 int id = Integer.parseInt(splitted[0]);
-                //Compose the queries similarity scores' matrix's line.
-                float[] QSMLine = new float[2];
-                QSMLine[0] = id;
-                QSMLine[1] = similarityScore;
-                //Add the matrix's line.
-                querySimilarityRanking.add(QSMLine);
+                int index = findQueryColumnIndex(id, normalizedUM.get(0));
+                //If the query has a score.
+                if (userUMLine[index] != -101f) {
+                    //Retrieving the result of the currently analyzed query (the set of tuples).
+                    HashSet<String> currentQueryResult = getQueryResult(q, attributesNames, splittedTuplesLines);
+                    //Calculating the Jaccard similarity between the rerference query and the currently analyzed.
+                    float similarityScore = getJaccardScore(queryResult, currentQueryResult);
+
+                    //Compose the queries similarity scores' matrix's line.
+                    float[] QSMLine = new float[2];
+                    QSMLine[0] = id;
+                    QSMLine[1] = similarityScore;
+                    //Add the matrix's line.
+                    querySimilarityRanking.add(QSMLine);
+                }
             }
             //Sorting the ranking matrix using the custom comparator in the reversed way (higher ranking
             // at the beginning of the array).
@@ -81,20 +100,7 @@ public class ContentBasedFilter {
                 System.out.println(l[0] + " " + l[1]);
             }*/
 
-            //The UM's line of the reference user.
-            float[] userUMLine = null;
-            //Retrieving the UM's line containing the scores of the reference user.
-            for (int i = 1; i < normalizedUM.size(); i++) {
-                if (normalizedUM.get(i)[0] == currentUserId) {
-                    userUMLine = normalizedUM.get(i);
-                }
-            }
-            //If the reference users' line is not found inside the UM.
-            if (userUMLine == null) {
-                System.err.println();
-                System.err.println("Error in finding the user line into utility matrix.");
-                System.exit(1);
-            }
+
             //The counter of the valid queries found.
             int usefulQueriesCounter = 0;
             //The array containing the scores assigned by the reference user to the most similar queries.
@@ -105,16 +111,13 @@ public class ContentBasedFilter {
                 if (usefulQueriesCounter < k) {
                     //Retrieving the currently analyzed query's ID.
                     int index = findQueryColumnIndex((int) l[0], normalizedUM.get(0));
-                    //If the reference user has already evaluated the currently analyzed query.
-                    if (userUMLine[index] != -101f) {
-                        //Add the query to the queries' score matrix.
-                        float[] QRSLine = new float[3];
-                        QRSLine[0] = l[0];
-                        QRSLine[1] = l[1];
-                        QRSLine[2] = userUMLine[index];
-                        queryRankingScores.add(QRSLine);
-                        usefulQueriesCounter++;
-                    }
+                    //Add the query to the queries' score matrix.
+                    float[] QRSLine = new float[3];
+                    QRSLine[0] = l[0];
+                    QRSLine[1] = l[1];
+                    QRSLine[2] = userUMLine[index];
+                    queryRankingScores.add(QRSLine);
+                    usefulQueriesCounter++;
                 }
             }
             //If k valid queries have been found successfully.
@@ -162,6 +165,7 @@ public class ContentBasedFilter {
 
     /**
      * Given the array of queries in string format, it removes the 'Q' char at the beginning of the ID of every query.
+     *
      * @param queries
      * @return
      */
