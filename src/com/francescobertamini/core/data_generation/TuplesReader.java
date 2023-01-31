@@ -30,8 +30,14 @@ public class TuplesReader {
         BufferedReader tuplesReader = new BufferedReader(new FileReader(fileName));
         //All the lines of the tuples CSV file are placed into an ArrayList.
         String tuplesLine = null;
-        while ((tuplesLine = tuplesReader.readLine()) != null) {
-            tuplesLines.add(tuplesLine);
+        try {
+            while ((tuplesLine = tuplesReader.readLine()) != null) {
+                tuplesLines.add(tuplesLine);
+            }
+        } catch (IOException e) {
+            System.err.println();
+            System.err.println("Tuples Reader - Unable to open the specified file \"" + fileName + "\".");
+            System.exit(1);
         }
         tuplesReader.close();
         //Every line is analyzed, to retrieve the name of the attributes and their values.

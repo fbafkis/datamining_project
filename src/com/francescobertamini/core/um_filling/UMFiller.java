@@ -34,14 +34,15 @@ public class UMFiller {
         ArrayList<float[]> filledNormalizedUM = new ArrayList<>();
         //The first line is the same (it contains the query IDs).
         filledNormalizedUM.add(normalizedUM.get(0));
+
         //Cycling over UM lines.
-        for (int i = 1; i < UMRowsDimension; i++) {
+        for (int i = 1; i < UMRowsDimension+1; i++) {
             //Creating the filled UM's new line.
             float[] filledUMLine = new float[UMColumnsDimension + 1];
             //Copy the UID (it remains the same).
             filledUMLine[0] = normalizedUM.get(i)[0];
             //Cycling over the query scores in the UM's line.
-            for (int j = 1; j < UMColumnsDimension; j++) {
+            for (int j = 1; j < UMColumnsDimension+1; j++) {
                 //If the score for the currently analyzed query (column, j index) has not been assigned yet by the
                 // currently analyzed user (line, i index).
                 if (normalizedUM.get(i)[j] == -101f) {
@@ -74,8 +75,8 @@ public class UMFiller {
                         finalScore = (collFilterScore + cBFilterScore) / 2;
                     }
                     //Log
-                    System.out.println();
-                    System.out.println("UM Filler - The final score for the query Q" + queryID + " is: " + finalScore + ".");
+                    //System.out.println();
+                    //System.out.println("UM Filler - The final score for the query Q" + queryID + " is: " + finalScore + ".");
                     //Assign the final score to currently analyzed query (column) for the currently analyzed user (line).
                     filledUMLine[j] = finalScore;
                 } else {
@@ -84,14 +85,11 @@ public class UMFiller {
                     filledUMLine[j] = normalizedUM.get(i)[j];
                 }
             }
+            filledNormalizedUM.add(filledUMLine);
         }
         //Log
         System.out.println();
         System.out.println("UM Filler - The utility matrix has been filled.");
-        //Prepare the printable (array of String) version that will be printed on a CSV file.
-        String[] printableUM = preparePrintableFilledUM(UMColumnsDimension, UMRowsDimension, filledNormalizedUM);
-        //Call the method to write out the CSV file.
-        writeFile("filled_utility_matrix", printableUM);
 
         //Printing the dense normalized utility matrix.
         /*for(float [] l : filledNormalizedUM) {
@@ -100,6 +98,11 @@ public class UMFiller {
             }
             System.out.println();
         }*/
+
+        //Prepare the printable (array of String) version that will be printed on a CSV file.
+        String[] printableUM = preparePrintableFilledUM(UMColumnsDimension, UMRowsDimension, filledNormalizedUM);
+        //Call the method to write out the CSV file.
+        writeFile("filled_utility_matrix", printableUM);
 
         //Return the normalize dense utility matrix.
         return filledNormalizedUM;
@@ -121,12 +124,12 @@ public class UMFiller {
         String firstLinePrintableUM;
         firstLinePrintableUM = "USER_IDs, Q" + filledNormalizedUM.get(0)[1];
         //Preparing the printable UM's first line.
-        for (int i = 2; i < UMColumnsDimension; i++) {
+        for (int i = 1; i < UMColumnsDimension+1; i++) {
             firstLinePrintableUM += ",Q" + filledNormalizedUM.get(0)[i];
         }
         printableUM[0] = firstLinePrintableUM;
         //Cycling over the numerical UM.
-        for (int i = 1; i < UMRowsDimension; i++) {
+        for (int i = 1; i < UMRowsDimension+1; i++) {
             //Composing a printable UM's new line.
             String line = new String();
             for (int j = 0; j < UMColumnsDimension + 1; j++) {
@@ -138,6 +141,7 @@ public class UMFiller {
                     line += "," + filledNormalizedUM.get(i)[j];
                 }
             }
+            printableUM[i]=line;
         }
         //Return the printable version of the UM.
         return printableUM;

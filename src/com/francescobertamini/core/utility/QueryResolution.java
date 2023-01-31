@@ -53,8 +53,8 @@ public class QueryResolution {
             }
         }
         //Log
-        System.out.println();
-        System.out.println("Query Solver - Query solved.");
+        //System.out.println();
+        //System.out.println("Query Solver - Query solved.");
 
         //Prints the resulting set of tuples.
         /*System.out.println("Query Solver - Result of size "+ result.size() +":");

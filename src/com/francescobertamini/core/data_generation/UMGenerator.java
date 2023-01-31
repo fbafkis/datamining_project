@@ -27,7 +27,7 @@ public class UMGenerator {
 
         //Compose the utility matrix
         //Prepare the first row of the string version containing all the query IDs.
-        String umFirstLine = "USER_IDs, Q" + Integer.toString(queryIDs[0]);
+        String umFirstLine = "USER_IDs,Q" + Integer.toString(queryIDs[0]);
         //Populating the first row of the numeric version.
         int splittedUMFirstLine[] = new int[UMColumnsDimension + 1];
         splittedUMFirstLine[0] = -1;
@@ -54,8 +54,7 @@ public class UMGenerator {
 
                     splittedUMLine[q + 1] = randomScore;
                 } else {
-                    umLine += ",,";
-
+                    umLine += ",";
                     splittedUMLine[q + 1] = 0;
                 }
             }

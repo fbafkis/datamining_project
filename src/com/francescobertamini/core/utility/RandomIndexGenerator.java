@@ -34,8 +34,8 @@ public class RandomIndexGenerator {
         //Order the final list of attributes' indexes.
         Collections.sort(orderedIndexes);
         //Log
-        System.out.println();
-        System.out.println("Random Indexes Picker - Indexes picked.");
+        //System.out.println();
+        //System.out.println("Random Indexes Picker - Indexes picked.");
 
         //Prints the ordered ArrayList containing the indexes.
         /*for(int index : orderedIndexes){

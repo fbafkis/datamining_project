@@ -33,13 +33,14 @@ public class UsersTastesComparator {
         int matrixLineCounter = 0;
         for (float[] matrixLine : normalizedUM) {
             //Skips the UM's first line containing the query IDs.
-            if (matrixLineCounter != 0) {
+            if (matrixLineCounter >0) {
                 int userID = (int) matrixLine[0];
                 //Skipping the reference user.
                 if (userID != currentUserId) {
                     float userScore = 0f;
                     int matchingQueries = 0;
                     //Cycling over the user's scores.
+                    //System.err.println(normalizedUM.get(0).length);
                     for (int i = 1; i < matrixLine.length; i++) {
                         //Consider the score only if evaluated by both the reference user and the current user.
                         if (currentUserScores[i] != -101f && matrixLine[i] != -101f) {
@@ -65,8 +66,8 @@ public class UsersTastesComparator {
         rankingMatrix.sort(customArrayComparator);
 
         //Log
-        System.out.println();
-        System.out.println("User tastes' comparator - Similarity ranking matrix produced for user U" + currentUserId + ".");
+        //System.out.println();
+        //System.out.println("User tastes' comparator - Similarity ranking matrix produced for user U" + currentUserId + ".");
 
         //Printing the ranking matrix.
        /* for (float[] l : rankingMatrix) {
