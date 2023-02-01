@@ -59,7 +59,7 @@ public class QueryGenerator {
         }
 
         //Print the query set
-        /*  for (int o = 0; o < UMColumnsDimension; o++) {
+          /*for (int o = 0; o < UMColumnsDimension; o++) {
           System.out.println(queries[o]);
         }*/
 

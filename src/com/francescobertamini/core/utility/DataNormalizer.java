@@ -1,6 +1,9 @@
 package com.francescobertamini.core.utility;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.francescobertamini.core.utility.FileWriter.writeFile;
 
 public class DataNormalizer {
 
@@ -11,7 +14,7 @@ public class DataNormalizer {
      * @param utilityMatrix the utility matrix to normalize
      * @return the normalized version of the utility matrix
      */
-    public static ArrayList<float[]> normalizeUM(ArrayList<int[]> utilityMatrix) {
+    public static ArrayList<float[]> normalizeUM(ArrayList<int[]> utilityMatrix) throws IOException {
         //The normalized UM made by arrays of float.
         ArrayList<float[]> normalizedUM = new ArrayList<>();
         //Cycling over the UM lines.
@@ -76,7 +79,32 @@ public class DataNormalizer {
         System.out.println();
         }*/
 
+        printNormalizedUM(normalizedUM);
+
         //Return the normalized utility matrix.
         return normalizedUM;
     }
+
+    /**
+     * It prints to a CSV file the normalized utility matrix.
+     *
+     * @param normalizedUM the utility matrix in array version
+     * @throws IOException
+     */
+    private static void printNormalizedUM(ArrayList<float[]> normalizedUM) throws IOException {
+        String [] printableUM = new String[normalizedUM.size()-1];
+        for (int i = 1; i < normalizedUM.size(); i++) {
+            String line = new String();
+            for (int j = 1; j < normalizedUM.get(0).length; j++) {
+                if (j == 1) {
+                    line += normalizedUM.get(i)[j];
+                } else {
+                    line += "," + normalizedUM.get(i)[j];
+                }
+            }
+            printableUM[i-1] = line;
+        }
+        writeFile("normalized_utility_matrix", printableUM );
+    }
 }
+
